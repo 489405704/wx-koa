@@ -1,0 +1,14 @@
+{
+    "wechat": {
+        "appID": "wxd4f1dda3e5a995e6",
+        "appSecret": "742646018d46d4d9eb0ab0ea3a613c60",
+        "token": "ycwxtoken123456",
+        "prefix": "https://api.weixin.qq.com/cfi-bin",
+        "mpPrefix": "https://mp.weixin.qq.com/cgi-bin"
+    },
+    "apiUrl": {
+        "accessToken": "%scgi-bin/token?grant_type=client_credential&appid=%s&secret=%s"
+    }
+
+
+}
