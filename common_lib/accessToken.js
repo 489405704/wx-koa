@@ -7,6 +7,7 @@ const wxconfig = require('../config/wxconfig.json')
 var f = {}
 
 var refreshAccessToken = () => {
+    console.log('begin to get access_token');
     var access_token;
     var data = fs.readFileSync('./config/access_token.json');
     access_token = JSON.parse(data); 
@@ -22,7 +23,19 @@ var refreshAccessToken = () => {
             url: accessToeknUrl
         };
         request.get(options, function(err, response, body){
-            console.log(response.body)
+            var resJson = JSON.parse(response.body);
+            var newAccessToken = resJson.access_token;
+            var timestamp = Date.now() + 7200*1000;
+
+            var tmpAccessToken = {
+                access_token: newAccessToken,
+                timestamp: timestamp
+            };
+            fs.writeFile('./config/access_token.json', JSON.stringify(tmpAccessToken), function (err) {
+                if (err) throw err;
+                console.log("Export access_token Success!");
+            });
+
         });
     }
 
@@ -30,14 +43,15 @@ var refreshAccessToken = () => {
 
 f.refreshToken = () => {
     //每分钟的0秒执行
-    // schedule.scheduleJob('0 * * * * *', function(){
-    //     console.log("get access_token");
-    // });
+    schedule.scheduleJob('0 * * * * *', function(){
+        refreshAccessToken();
+    });
     refreshAccessToken();
 };
 
 f.getAccessToken = () => {
-
+    var data = fs.readFileSync('./config/access_token.json');
+    return JSON.parse(data); 
 };
 
 
